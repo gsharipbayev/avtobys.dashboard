@@ -37,11 +37,9 @@
         .park-count { font-size: 14px; font-weight: 700; color: #0055ff; background: #eef3ff; padding: 4px 10px; border-radius: 10px;}
         
         .filter-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .filter-btn { flex: 1; background: #fff; border-radius: 16px; padding: 16px 10px; color: #1a1b22; font-size: 13px; font-weight: 700; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); cursor: pointer; border: 1px solid #f0f2f5; transition: 0.2s;}
-        .filter-btn:active { transform: scale(0.97); }
+        .filter-btn { flex: 1; background: #fff; border-radius: 16px; padding: 16px 10px; color: #1a1b22; font-size: 13px; font-weight: 700; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); cursor: pointer; border: 1px solid #f0f2f5;}
         
-        .action-button { width: 100%; background: #1a1b22; color: #fff; border: none; border-radius: 20px; padding: 20px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;}
-        .action-button:active { transform: scale(0.98); }
+        .action-button { width: 100%; background: #1a1b22; color: #fff; border: none; border-radius: 20px; padding: 20px; font-size: 16px; font-weight: 700; cursor: pointer;}
         .secondary-btn { background: #f4f5f9; color: #1a1b22; margin-top: 10px; padding: 14px; border-radius: 14px; width: 100%; border: none; font-weight: 700; cursor: pointer;}
         
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f9; z-index: 1000; display: none; overflow-y: auto; padding-bottom: 20px;}
@@ -92,7 +90,7 @@
                 </div>
                 <div class="status-block" style="text-align: right; align-items: flex-end;">
                     <div class="status-number blue" id="latest-count">0</div>
-                    <div class="status-label" id="latest-label">Бүгін жасалған (Смена)</div>
+                    <div class="status-label" id="latest-label">Бүгін жасалған</div>
                 </div>
             </div>
 
@@ -101,7 +99,7 @@
 
             <div class="filter-row">
                 <div class="filter-btn" onclick="openModal('routes-modal')">🗺️ Маршруттар</div>
-                <div class="filter-btn" onclick="openModal('days-modal')">📅 Смена бойынша</div>
+                <div class="filter-btn" onclick="openModal('days-modal')">📅 Смена</div>
             </div>
             <button class="action-button" onclick="openModal('table-modal')">📋 Толық тізімді көру</button>
         </div>
@@ -136,8 +134,7 @@
 
     <script>
         // ==========================================
-        // ВАЖНО: ВСТАВЬТЕ ВАШУ НОВУЮ ССЫЛКУ СЮДА
-        const GOOGLE_API_URL = 'ВСТАВЬТЕ_ССЫЛКУ_СЮДА';
+        const GOOGLE_API_URL = 'https://script.google.com/macros/s/AKfycbyIq_TzbUb7E4ebzdj3SSvtSDOHF8EyUu8UkCUdpictaqXPJ82-5Vxchg5fTp18Se1JDg/exec';
         // ==========================================
         
         const PIN = '2019';
@@ -167,8 +164,7 @@
 
             fetch(GOOGLE_API_URL)
                 .then(response => {
-                    // Проверка на ошибку CORS (если скрипт не опубликован как API)
-                    if (!response.ok) throw new Error('Сервермен байланыс жоқ (Network Error).');
+                    if (!response.ok) throw new Error('Сервермен байланыс жоқ (Network Error). Настройки доступа Google Script проверьте "У всех".');
                     return response.json();
                 })
                 .then(data => {
@@ -188,11 +184,9 @@
                         document.getElementById('latest-label').innerText = `Смена (${data.currentShiftLabel})`;
                     }
                     
-                    // Автопарктер (Топ 5)
                     let pHtml = '';
                     let top5Parks = data.parks.slice(0, 5);
                     top5Parks.forEach(p => {
-                        let pct = p.target > 0 ? ((p.done/p.target)*100).toFixed(0) : 0;
                         pHtml += `<div class="park-row"><span class="park-name">${p.name}</span><span class="park-count">${p.done} / ${p.target}</span></div>`;
                     });
                     
@@ -201,29 +195,24 @@
                     }
                     document.getElementById('parks-container').innerHTML = pHtml;
 
-                    // Барлық автопарктер
                     let fullPHtml = '';
                     data.parks.forEach(p => {
-                        let pct = p.target > 0 ? ((p.done/p.target)*100).toFixed(0) : 0;
                         fullPHtml += `<div class="park-row"><span class="park-name">${p.name}</span><span class="park-count">${p.done} / ${p.target}</span></div>`;
                     });
                     document.getElementById('parks-full-content').innerHTML = fullPHtml;
 
-                    // Маршруттар
                     let rHtml = '';
                     data.routes.forEach(r => {
                         rHtml += `<div class="list-item"><span>Маршрут: ${r.name}</span><span class="list-val">${r.done}</span></div>`;
                     });
                     document.getElementById('routes-content').innerHTML = rHtml;
 
-                    // Күндер (смены)
                     let dHtml = '';
                     data.days.forEach(d => {
                         dHtml += `<div class="list-item"><span>Смена ${d.date}</span><span class="list-val">${d.count} авто</span></div>`;
                     });
                     document.getElementById('days-content').innerHTML = dHtml;
 
-                    // Кесте
                     let tHtml = '';
                     data.fullList.forEach(i => {
                         tHtml += `<tr><td>${i.park.length > 12 ? i.park.substring(0, 12) + '...' : i.park}</td><td>${i.route}</td><td style="font-weight:700; color:#0055ff;">${i.id}</td><td>${i.model.substring(0, 8)}</td></tr>`;
@@ -233,7 +222,7 @@
                 .catch(err => {
                     document.getElementById('loading-indicator').style.display = 'none';
                     document.getElementById('dashboard-content').style.display = 'block';
-                    document.getElementById('error-container').innerHTML = `<div class="error-message">Қосылу қатесі: Google Script сілтемесін дұрыс жаңартқаныңызды тексеріңіз.<br><br>Техникалық: ${err.message}</div>`;
+                    document.getElementById('error-container').innerHTML = `<div class="error-message">Қосылу қатесі: Google Script сілтемесін немесе "У всех" доступын тексеріңіз.<br><br>Техникалық: ${err.message}</div>`;
                 });
         }
     </script>
