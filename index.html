@@ -49,7 +49,7 @@
         .list-val { color: #0055ff; font-weight: 700; }
         
         .table-wrapper { background: #fff; border-radius: 16px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 400px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 450px; }
         th, td { padding: 12px 8px; text-align: left; border-bottom: 1px solid #f8f9fa; }
         th { background: #fafafa; color: #8e94a6; font-weight: 700; white-space: nowrap; }
         td { color: #1a1b22; font-weight: 500; }
@@ -130,8 +130,10 @@
     </div></div>
 
     <script>
-        // === ВАЖНО: ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT ===
+        // ========================================================
+        // ВАЖНО: ВСТАВЬТЕ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT
         const API_URL = 'СЮДА_ВСТАВИТЬ_ВАШУ_ССЫЛКУ';
+        // ========================================================
 
         const PIN = '2019';
 
@@ -145,17 +147,32 @@
             }
         }
 
-        function openModal(id) { document.getElementById('main-view').style.display = 'none'; document.getElementById(id).classList.add('active'); }
-        function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); document.getElementById('main-view').style.display = 'block'; }
-        function showAllParks(btn) { document.getElementById('hidden-parks').style.display = 'block'; btn.style.display = 'none'; }
+        // Логика открытия/закрытия модальных окон
+        function openModal(id) { 
+            document.getElementById('main-view').style.display = 'none'; 
+            document.getElementById(id).classList.add('active'); 
+        }
+        function closeModals() { 
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); 
+            document.getElementById('main-view').style.display = 'block'; 
+            window.scrollTo(0, 0); // Возвращаем скролл наверх
+        }
+        
+        // Показ всех автопарков
+        function showAllParks(btn) { 
+            document.getElementById('hidden-parks').style.display = 'block'; 
+            btn.style.display = 'none'; 
+        }
 
+        // Основная функция загрузки данных
         async function loadData() {
             try {
+                // Запрос к бэкенду
                 const response = await fetch(API_URL);
                 const data = await response.json();
 
                 if (!data.success) {
-                    document.getElementById('loader').innerText = 'Қате: ' + data.errorMsg;
+                    document.getElementById('loader').innerText = 'Қате (Ошибка Google): ' + data.errorMsg;
                     return;
                 }
 
@@ -163,43 +180,49 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
 
+                // Заполняем главные цифры
                 document.getElementById('total-count').innerText = data.totalDone;
                 document.getElementById('total-percent').innerText = `(${data.totalPercent}%)`;
                 document.getElementById('latest-count').innerText = data.todayDone;
 
-                // Парки
+                // 1. ПАРКИ (Топ 6 + Остальные)
                 let pHtml = '';
                 data.parks.forEach((p, i) => {
                     let pct = p.target > 0 ? ((p.done/p.target)*100).toFixed(1) : 0;
                     let row = `<div class="park-row"><span class="park-name">${i+1}. ${p.name}</span><span class="park-count">${p.done}/${p.target} (${pct}%)</span></div>`;
-                    if (i < 6) { pHtml += row; } 
-                    else {
+                    
+                    if (i < 6) { 
+                        pHtml += row; 
+                    } else {
                         if (i === 6) pHtml += `<div id="hidden-parks" style="display:none;">`;
                         pHtml += row;
                     }
                 });
-                if (data.parks.length > 6) pHtml += `</div><span class="show-all-btn" onclick="showAllParks(this)">Барлығын көру ↓</span>`;
+                if (data.parks.length > 6) {
+                    pHtml += `</div><span class="show-all-btn" onclick="showAllParks(this)">Барлығын көру ↓</span>`;
+                }
                 document.getElementById('parks-container').innerHTML = pHtml;
 
-                // Маршруты
+                // 2. МАРШРУТЫ
                 let rHtml = '';
                 data.routes.forEach(r => {
                     rHtml += `<div class="list-item"><span>Маршрут ${r.name}</span><span class="list-val">${r.done}/${r.target} (${r.percent}%)</span></div>`;
                 });
                 document.getElementById('routes-content').innerHTML = rHtml;
 
-                // Дни
+                // 3. ДНИ
                 let dHtml = '';
                 data.days.forEach(d => {
                     dHtml += `<div class="list-item"><span>${d.date}</span><span class="list-val">${d.count} автобус</span></div>`;
                 });
                 document.getElementById('days-content').innerHTML = dHtml;
 
-                // Таблицы автобусов
+                // 4. ТАБЛИЦЫ АВТОБУСОВ (Все и За сегодня)
                 let allHtml = '', todayHtml = '', allIdx = 1, todayIdx = 1;
                 data.fullList.forEach(i => {
                     let rowHtml = `<tr><td>${allIdx++}</td><td>${i.gosNum}</td><td>${i.garage}</td><td>${i.route}</td><td>${i.brigade}</td><td>${i.doors}</td></tr>`;
                     allHtml += rowHtml;
+                    
                     if (i.isToday) {
                         todayHtml += `<tr><td>${todayIdx++}</td><td>${i.gosNum}</td><td>${i.garage}</td><td>${i.route}</td><td>${i.brigade}</td><td>${i.doors}</td></tr>`;
                     }
@@ -208,8 +231,8 @@
                 document.getElementById('today-buses-content').innerHTML = todayHtml;
 
             } catch (error) {
-                document.getElementById('loader').innerText = 'Сервермен байланыс жоқ (Ошибка сети)';
-                console.error(error);
+                document.getElementById('loader').innerText = 'Сервермен байланыс жоқ (Ошибка сети или неверная ссылка API_URL)';
+                console.error('Ошибка загрузки:', error);
             }
         }
     </script>
