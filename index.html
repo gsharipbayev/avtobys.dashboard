@@ -3,46 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Mobility Monitoring</title>
+    <title>Monitoring</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --blue: #0055ff; --orange: #ff7a00; --bg: #f4f5f9; --card: #ffffff; --text: #1a1b22; --sub: #8e94a6; }
-        body { margin: 0; padding: 15px; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 400px; display: none; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        #login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-card { background: var(--card); padding: 40px 20px; border-radius: 32px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .pin-input { width: 100%; padding: 15px; font-size: 28px; font-weight: 800; text-align: center; letter-spacing: 12px; border: 2px solid #eee; border-radius: 20px; margin: 20px 0; outline: none; transition: 0.3s; }
-        .pin-input:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(0,85,255,0.1); }
-        .login-btn { width: 100%; background: #000; color: #fff; border: none; padding: 20px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; }
-
-        .brand { font-size: 22px; font-weight: 900; color: var(--blue); letter-spacing: -0.5px; margin-bottom: 4px; }
-        .subtitle { font-size: 12px; font-weight: 700; color: var(--sub); text-transform: uppercase; letter-spacing: 1px; }
-        .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        
+        body { margin: 0; padding: 15px; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+        .app-container { width: 100%; max-width: 400px; margin: 0 auto; display: none; }
+        #login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: var(--card); padding: 40px 20px; border-radius: 32px; width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .pin-input { width: 80%; padding: 15px; font-size: 24px; font-weight: 800; text-align: center; letter-spacing: 10px; border: 2px solid #eee; border-radius: 16px; margin: 20px 0; outline: none; }
+        .login-btn { width: 90%; background: #000; color: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
+        .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .stat-grid { display: flex; justify-content: space-between; }
         .stat-val { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-        .stat-label { font-size: 12px; font-weight: 600; color: var(--sub); }
-        
-        .park-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8f9fa; font-size: 14px; font-weight: 600; }
-        .park-row:last-child { border-bottom: none; }
-        .park-count { color: var(--blue); font-weight: 800; }
-
-        .btn-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-sub { flex: 1; background: var(--card); padding: 15px; border-radius: 18px; text-align: center; font-weight: 700; font-size: 13px; cursor: pointer; border: 1px solid #eee; }
-        .btn-main { width: 100%; background: #000; color: #fff; border: none; padding: 20px; border-radius: 20px; font-weight: 700; cursor: pointer; }
-
+        .park-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f8f9fa; font-size: 13px; font-weight: 600; }
         .modal { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none; overflow-y: auto; padding: 15px; }
         .modal.active { display: block; }
-        .modal-header { display: flex; align-items: center; margin-bottom: 20px; }
-        .back-btn { background: var(--card); border: none; padding: 12px 20px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-right: 15px; }
-        
-        .table-wrapper { background: var(--card); border-radius: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 450px; }
-        th { background: #fafafa; padding: 15px 10px; text-align: left; color: var(--sub); }
-        td { padding: 12px 10px; border-top: 1px solid #f8f9fa; font-weight: 600; }
-        
+        .back-btn { background: var(--card); border: none; padding: 12px 20px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; color: var(--sub); padding: 10px; }
+        td { padding: 10px; border-top: 1px solid #f8f9fa; font-weight: 600; }
         #loader { text-align: center; padding: 40px; color: var(--sub); font-weight: 600; }
     </style>
 </head>
@@ -50,122 +30,76 @@
 
     <div id="login-screen">
         <div class="login-card">
-            <div class="brand">Smart Mobility</div>
-            <div class="subtitle" style="margin-bottom: 20px;">Almaty Monitoring</div>
-            <input type="password" id="pin-input" class="pin-input" placeholder="••••" inputmode="numeric">
+            <h2 style="color:var(--blue); margin:0;">Smart Mobility</h2>
+            <p style="color:var(--sub); font-size:12px;">Алматы • Монтаж</p>
+            <input type="password" id="pin" class="pin-input" placeholder="••••" inputmode="numeric">
             <button class="login-btn" onclick="auth()">Кіру</button>
-            <p id="error" style="color:red; font-size:12px; display:none; margin-top:10px;">Қате пин-код</p>
         </div>
     </div>
 
     <div class="app-container" id="app">
-        <div class="header-card" style="text-align: center; margin-bottom: 20px;">
-            <div class="brand">Smart Mobility Almaty</div>
-            <div class="subtitle">Монтаж мониторингі</div>
-        </div>
-
-        <div id="loader">Мәліметтер жүктелуде...</div>
-
-        <div id="content" style="display: none;">
+        <div id="loader">Жүктелуде...</div>
+        <div id="content" style="display:none">
             <div class="card stat-grid">
-                <div onclick="openM('all-buses-modal')">
-                    <div class="stat-val" style="color: var(--orange)" id="total-done">0</div>
-                    <div class="stat-label">Барлық автобустар <span id="total-pct"></span></div>
+                <div onclick="openM('all-modal')">
+                    <div class="stat-val" style="color:var(--orange)" id="t-done">0</div>
+                    <div style="font-size:12px; color:var(--sub)">Барлығы <span id="t-pct"></span></div>
                 </div>
-                <div style="text-align: right" onclick="openM('today-buses-modal')">
-                    <div class="stat-val" style="color: var(--blue)" id="today-done">0</div>
-                    <div class="stat-label">Бүгін жасалған</div>
+                <div style="text-align:right" onclick="openM('today-modal')">
+                    <div class="stat-val" style="color:var(--blue)" id="t-today">0</div>
+                    <div style="font-size:12px; color:var(--sub)">Бүгін жасалған</div>
                 </div>
             </div>
-
-            <div class="subtitle" style="margin: 20px 0 10px 5px;">Автопарктер статистикасы</div>
-            <div class="card" id="parks-list"></div>
-            <div id="more-parks" style="display:none" class="card"></div>
-            <div id="show-btn" style="text-align:center; color:var(--blue); font-weight:700; margin-bottom:20px; cursor:pointer;" onclick="showAll()">Барлығын көрсету ↓</div>
-
-            <div class="btn-group">
-                <div class="btn-sub" onclick="openM('routes-modal')">Маршруттар</div>
-                <div class="btn-sub" onclick="openM('days-modal')">Күнделікті</div>
+            <div style="font-size:14px; font-weight:800; margin:15px 5px;">Автопарктер</div>
+            <div class="card" id="p-list"></div>
+            <div class="card" id="p-more" style="display:none"></div>
+            <button id="p-btn" style="width:100%; background:none; border:none; color:var(--blue); font-weight:700; margin-bottom:20px;" onclick="showP()">Барлығы ↓</button>
+            <div style="display:flex; gap:10px">
+                <button class="login-btn" style="background:var(--card); color:#000; flex:1" onclick="openM('r-modal')">Маршруттар</button>
+                <button class="login-btn" style="background:var(--card); color:#000; flex:1" onclick="openM('d-modal')">Күнделікті</button>
             </div>
-            <button class="btn-main" onclick="openM('all-buses-modal')">Толық тізімді көру</button>
         </div>
     </div>
 
-    <div class="modal" id="routes-modal">
-        <div class="modal-header"><button class="back-btn" onclick="closeM()">←</button><h3>Маршруттар</h3></div>
-        <div id="routes-list"></div>
-    </div>
-
-    <div class="modal" id="days-modal">
-        <div class="modal-header"><button class="back-btn" onclick="closeM()">←</button><h3>Күнделікті</h3></div>
-        <div id="days-list"></div>
-    </div>
-
-    <div class="modal" id="all-buses-modal">
-        <div class="modal-header"><button class="back-btn" onclick="closeM()">←</button><h3>Барлық тізім</h3></div>
-        <div class="table-wrapper"><table><thead><tr><th>№</th><th>Гос №</th><th>Борт</th><th>Марш.</th><th>Бригада</th><th>Двери</th></tr></thead><tbody id="all-table"></tbody></table></div>
-    </div>
-
-    <div class="modal" id="today-buses-modal">
-        <div class="modal-header"><button class="back-btn" onclick="closeM()">←</button><h3>Бүгін жасалған</h3></div>
-        <div class="table-wrapper"><table><thead><tr><th>№</th><th>Гос №</th><th>Борт</th><th>Марш.</th><th>Бригада</th><th>Двери</th></tr></thead><tbody id="today-table"></tbody></table></div>
-    </div>
+    <div class="modal" id="all-modal"><button class="back-btn" onclick="closeM()">← Артқа</button><h3>Тізім</h3><div class="card" style="overflow-x:auto"><table><thead><tr><th>№</th><th>Гос</th><th>Борт</th><th>Марш</th><th>Бригада</th></tr></thead><tbody id="all-t"></tbody></table></div></div>
+    <div class="modal" id="today-modal"><button class="back-btn" onclick="closeM()">← Артқа</button><h3>Бүгін</h3><div class="card" style="overflow-x:auto"><table><thead><tr><th>№</th><th>Гос</th><th>Борт</th><th>Марш</th><th>Бригада</th></tr></thead><tbody id="today-t"></tbody></table></div></div>
+    <div class="modal" id="r-modal"><button class="back-btn" onclick="closeM()">← Артқа</button><h3>Маршруттар</h3><div id="r-list"></div></div>
+    <div class="modal" id="d-modal"><button class="back-btn" onclick="closeM()">← Артқа</button><h3>Күнделікті</h3><div id="d-list"></div></div>
 
     <script>
         const API = 'https://script.google.com/macros/s/AKfycbyIq_TzbUb7E4ebzdj3SSvtSDOHF8EyUu8UkCUdpictaqXPJ82-5Vxchg5fTp18Se1JDg/exec';
-        
-        function auth() {
-            if(document.getElementById('pin-input').value === '2019') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                fetchData();
-            } else { document.getElementById('error').style.display = 'block'; }
-        }
-
+        function auth() { if(document.getElementById('pin').value === '2019') { document.getElementById('login-screen').style.display='none'; document.getElementById('app').style.display='block'; load(); } }
         function openM(id) { document.getElementById('app').style.display='none'; document.getElementById(id).classList.add('active'); }
         function closeM() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); document.getElementById('app').style.display='block'; }
-        function showAll() { document.getElementById('more-parks').style.display='block'; document.getElementById('show-btn').style.display='none'; }
+        function showP() { document.getElementById('p-more').style.display='block'; document.getElementById('p-btn').style.display='none'; }
 
-        async function fetchData() {
+        async function load() {
             try {
-                const res = await fetch(API);
-                const data = await res.json();
-                if(!data.success) throw data.errorMsg;
-
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-
-                document.getElementById('total-done').innerText = data.totalDone;
-                document.getElementById('total-pct').innerText = `(${data.totalPercent}%)`;
-                document.getElementById('today-done').innerText = data.todayDone;
-
-                // Парки
+                const r = await fetch(API);
+                const d = await r.json();
+                document.getElementById('loader').style.display='none';
+                document.getElementById('content').style.display='block';
+                document.getElementById('t-done').innerText = d.totalDone;
+                document.getElementById('t-pct').innerText = `(${d.totalPercent}%)`;
+                document.getElementById('t-today').innerText = d.todayDone;
                 let p1 = '', p2 = '';
-                data.parks.forEach((p, i) => {
-                    let html = `<div class="park-row"><span>${i+1}. ${p.name}</span><span class="park-count">${p.done}/${p.target}</span></div>`;
-                    if(i < 6) p1 += html; else p2 += html;
+                d.parks.forEach((p, i) => { 
+                    let h = `<div class="park-row"><span>${i+1}. ${p.name}</span><span style="color:var(--blue)">${p.done}/${p.target}</span></div>`;
+                    if(i < 6) p1 += h; else p2 += h;
                 });
-                document.getElementById('parks-list').innerHTML = p1;
-                document.getElementById('more-parks').innerHTML = p2;
-                if(!p2) document.getElementById('show-btn').style.display='none';
-
-                // Таблицы
-                let tFull = '', tToday = '', idxF = 1, idxT = 1;
-                data.fullList.forEach(b => {
-                    let row = `<tr><td>${idxF++}</td><td>${b.gosNum}</td><td>${b.garage}</td><td>${b.route}</td><td>${b.brigade}</td><td>${b.doors}</td></tr>`;
-                    tFull += row;
-                    if(b.isToday) tToday += `<tr><td>${idxT++}</td><td>${b.gosNum}</td><td>${b.garage}</td><td>${b.route}</td><td>${b.brigade}</td><td>${b.doors}</td></tr>`;
+                document.getElementById('p-list').innerHTML = p1;
+                document.getElementById('p-more').innerHTML = p2;
+                let aT = '', tT = '', iA = 1, iT = 1;
+                d.fullList.forEach(b => {
+                    let row = `<tr><td>${iA++}</td><td>${b.gosNum}</td><td>${b.garage}</td><td>${b.route}</td><td>${b.brigade}</td></tr>`;
+                    aT += row;
+                    if(b.isToday) tT += `<tr><td>${iT++}</td><td>${b.gosNum}</td><td>${b.garage}</td><td>${b.route}</td><td>${b.brigade}</td></tr>`;
                 });
-                document.getElementById('all-table').innerHTML = tFull;
-                document.getElementById('today-table').innerHTML = tToday;
-
-                // Маршруты и дни
-                document.getElementById('routes-list').innerHTML = data.routes.map(r => `<div class="card" style="display:flex; justify-content:space-between"><b>${r.name} маршрут</b><span>${r.done}/${r.target} (${r.percent}%)</span></div>`).join('');
-                document.getElementById('days-list').innerHTML = data.days.map(d => `<div class="card" style="display:flex; justify-content:space-between"><b>${d.date}</b><span>${d.count} автобус</span></div>`).join('');
-
-            } catch(e) { 
-                document.getElementById('loader').innerText = 'Қате: ' + e; 
-            }
+                document.getElementById('all-t').innerHTML = aT;
+                document.getElementById('today-t').innerHTML = tT;
+                document.getElementById('r-list').innerHTML = d.routes.map(r => `<div class="card" style="display:flex; justify-content:space-between"><b>${r.name}</b><span>${r.done}/${r.target} (${r.percent}%)</span></div>`).join('');
+                document.getElementById('d-list').innerHTML = d.days.map(d => `<div class="card" style="display:flex; justify-content:space-between"><b>${d.date}</b><span>${d.count}</span></div>`).join('');
+            } catch(e) { document.getElementById('loader').innerText = 'Ошибка'; }
         }
     </script>
 </body>
