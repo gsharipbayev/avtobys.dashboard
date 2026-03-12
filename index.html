@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 15px; font-family: 'Inter', sans-serif; background-color: #f4f5f9; display: flex; justify-content: center; -webkit-tap-highlight-color: transparent; }
-        .app-container { width: 100%; max-width: 400px; position: relative; display: none; margin: 0 auto; }
+        .app-container { width: 100%; max-width: 400px; position: relative; display: none; margin: 0 auto; padding-bottom: 20px;}
         
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f9; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .login-card { background: #fff; padding: 30px; border-radius: 24px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
@@ -16,13 +16,12 @@
         .login-btn { width: 100%; background: #000; color: #fff; border: none; padding: 18px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; }
         
         .brand-text { color: #0055ff; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 5px; }
-        
         .header-card { background-color: #ffffff; border-radius: 20px; padding: 20px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; text-align: center; }
         .montazh-title { color: #8e94a6; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         
         .card { background-color: #ffffff; border-radius: 24px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .status-card { display: flex; justify-content: space-between; align-items: flex-start; }
-        .status-block { cursor: pointer; padding: 5px; border-radius: 10px; transition: 0.2s; }
+        .status-block { cursor: pointer; padding: 5px; border-radius: 10px; transition: 0.2s; width: 48%; }
         .status-block:active { background: #f0f0f0; }
         .status-number { font-size: 34px; font-weight: 800; line-height: 1; margin-bottom: 6px; letter-spacing: -1px; }
         .status-number.orange { color: #ff7a00; }
@@ -31,7 +30,6 @@
         .status-label { color: #8e94a6; font-size: 12px; font-weight: 600; }
         
         .section-header { font-size: 18px; font-weight: 800; color: #1a1b22; margin: 20px 0 12px 5px; }
-        
         .park-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f8f9fa; }
         .park-row:last-child { border-bottom: none; }
         .park-name { font-size: 13px; font-weight: 600; color: #1a1b22; max-width: 65%; }
@@ -41,19 +39,22 @@
         .filter-row { display: flex; gap: 10px; margin-bottom: 20px; }
         .filter-btn { flex: 1; background: #fff; border-radius: 16px; padding: 16px 10px; color: #1a1b22; font-size: 13px; font-weight: 700; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); cursor: pointer; border: 1px solid #f0f0f0; }
         
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f9; z-index: 1000; display: none; overflow-y: auto; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f4f5f9; z-index: 1000; display: none; overflow-y: auto; padding-bottom: 30px;}
         .modal.active { display: block; }
         .modal-container { width: 100%; max-width: 400px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
         .back-btn { background: #fff; color: #1a1b22; border: none; padding: 16px; border-radius: 16px; font-weight: 700; cursor: pointer; margin-bottom: 15px; width: 100%; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: #1a1b22; }
+        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: #1a1b22; padding-left: 5px; }
         
         .list-item { background: #fff; padding: 16px; border-radius: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.01); }
         .list-val { color: #0055ff; font-weight: 700; }
         
-        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 16px; overflow: hidden; font-size: 11px; }
-        th, td { padding: 10px 5px; text-align: left; border-bottom: 1px solid #f8f9fa; }
-        th { background: #fafafa; color: #8e94a6; font-weight: 700; }
+        .table-wrapper { background: #fff; border-radius: 16px; overflow-x: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 400px; }
+        th, td { padding: 12px 8px; text-align: left; border-bottom: 1px solid #f8f9fa; }
+        th { background: #fafafa; color: #8e94a6; font-weight: 700; white-space: nowrap; }
         td { color: #1a1b22; font-weight: 500; }
+        
+        #loader { text-align: center; padding: 20px; color: #8e94a6; font-size: 14px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -74,44 +75,46 @@
             <div class="montazh-title">Монтаж мониторингі</div>
         </div>
 
-        <div class="card status-card">
-            <div class="status-block" onclick="openModal('all-buses-modal')">
-                <div><span class="status-number orange" id="total-count">--</span><span class="status-percent" id="total-percent"></span></div>
-                <div class="status-label">Барлық автобустар</div>
-            </div>
-            <div class="status-block" style="text-align: right; align-items: flex-end;" onclick="openModal('today-buses-modal')">
-                <div class="status-number blue" id="latest-count">--</div>
-                <div class="status-label">Бүгін жасалған</div>
-            </div>
-        </div>
+        <div id="loader">Мәліметтер жүктелуде, күте тұрыңыз...</div>
 
-        <div class="section-header">Автопарктер статистикасы</div>
-        <div class="card" id="parks-container" style="padding: 10px 20px;">
-            Жүктелуде...
-        </div>
+        <div id="dashboard-content" style="display: none;">
+            <div class="card status-card">
+                <div class="status-block" onclick="openModal('all-buses-modal')">
+                    <div><span class="status-number orange" id="total-count">0</span><span class="status-percent" id="total-percent"></span></div>
+                    <div class="status-label">Барлық автобустар</div>
+                </div>
+                <div class="status-block" style="text-align: right; align-items: flex-end;" onclick="openModal('today-buses-modal')">
+                    <div class="status-number blue" id="latest-count">0</div>
+                    <div class="status-label">Бүгін жасалған</div>
+                </div>
+            </div>
 
-        <div class="filter-row">
-            <div class="filter-btn" onclick="openModal('routes-modal')">Маршруттар</div>
-            <div class="filter-btn" onclick="openModal('days-modal')">Күнделікті</div>
+            <div class="section-header">Автопарктер статистикасы</div>
+            <div class="card" id="parks-container" style="padding: 10px 20px;"></div>
+
+            <div class="filter-row">
+                <div class="filter-btn" onclick="openModal('routes-modal')">Маршруттар</div>
+                <div class="filter-btn" onclick="openModal('days-modal')">Күнделікті</div>
+            </div>
         </div>
     </div>
 
     <div class="modal" id="routes-modal"><div class="modal-container">
         <button class="back-btn" onclick="closeModals()">← Артқа қайту</button>
-        <div class="modal-title">Маршруттар (Өсу ретімен)</div>
+        <div class="modal-title">Маршруттар</div>
         <div id="routes-content"></div>
     </div></div>
 
     <div class="modal" id="days-modal"><div class="modal-container">
         <button class="back-btn" onclick="closeModals()">← Артқа қайту</button>
-        <div class="modal-title">Күнделікті (Жаңадан ескіге)</div>
+        <div class="modal-title">Күнделікті</div>
         <div id="days-content"></div>
     </div></div>
 
     <div class="modal" id="all-buses-modal"><div class="modal-container">
         <button class="back-btn" onclick="closeModals()">← Артқа қайту</button>
         <div class="modal-title">Барлық автобустар</div>
-        <div style="overflow-x:auto;"><table>
+        <div class="table-wrapper"><table>
             <thead><tr><th>№</th><th>Гос №</th><th>Борт №</th><th>Марш.</th><th>Бригада</th><th>Двери</th></tr></thead>
             <tbody id="all-buses-content"></tbody>
         </table></div>
@@ -120,83 +123,94 @@
     <div class="modal" id="today-buses-modal"><div class="modal-container">
         <button class="back-btn" onclick="closeModals()">← Артқа қайту</button>
         <div class="modal-title">Бүгін жасалған автобустар</div>
-        <div style="overflow-x:auto;"><table>
+        <div class="table-wrapper"><table>
             <thead><tr><th>№</th><th>Гос №</th><th>Борт №</th><th>Марш.</th><th>Бригада</th><th>Двери</th></tr></thead>
             <tbody id="today-buses-content"></tbody>
         </table></div>
     </div></div>
 
     <script>
+        // === ВАЖНО: ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT ===
+        const API_URL = 'СЮДА_ВСТАВИТЬ_ВАШУ_ССЫЛКУ';
+
         const PIN = '2019';
+
         function checkPin() {
             if(document.getElementById('pin-input').value === PIN) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-view').style.display = 'block';
                 loadData();
-            } else { document.getElementById('pin-error').style.display = 'block'; }
+            } else { 
+                document.getElementById('pin-error').style.display = 'block'; 
+            }
         }
 
         function openModal(id) { document.getElementById('main-view').style.display = 'none'; document.getElementById(id).classList.add('active'); }
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); document.getElementById('main-view').style.display = 'block'; }
         function showAllParks(btn) { document.getElementById('hidden-parks').style.display = 'block'; btn.style.display = 'none'; }
 
-        function loadData() {
-            google.script.run.withSuccessHandler(data => {
-                if(!data.success) { alert('Қате: ' + data.errorMsg); return; }
-                
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (!data.success) {
+                    document.getElementById('loader').innerText = 'Қате: ' + data.errorMsg;
+                    return;
+                }
+
+                // Скрываем лоадер, показываем контент
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+
                 document.getElementById('total-count').innerText = data.totalDone;
-                document.getElementById('total-percent').innerText = "(" + data.totalPercent + "%)";
+                document.getElementById('total-percent').innerText = `(${data.totalPercent}%)`;
                 document.getElementById('latest-count').innerText = data.todayDone;
-                
-                // 1. ПАРКИ (Топ 6 + Скрытые)
+
+                // Парки
                 let pHtml = '';
                 data.parks.forEach((p, i) => {
                     let pct = p.target > 0 ? ((p.done/p.target)*100).toFixed(1) : 0;
                     let row = `<div class="park-row"><span class="park-name">${i+1}. ${p.name}</span><span class="park-count">${p.done}/${p.target} (${pct}%)</span></div>`;
-                    
-                    if (i < 6) {
-                        pHtml += row;
-                    } else {
+                    if (i < 6) { pHtml += row; } 
+                    else {
                         if (i === 6) pHtml += `<div id="hidden-parks" style="display:none;">`;
                         pHtml += row;
                     }
                 });
-                if (data.parks.length > 6) {
-                    pHtml += `</div><span class="show-all-btn" onclick="showAllParks(this)">Барлығын көру ↓</span>`;
-                }
+                if (data.parks.length > 6) pHtml += `</div><span class="show-all-btn" onclick="showAllParks(this)">Барлығын көру ↓</span>`;
                 document.getElementById('parks-container').innerHTML = pHtml;
 
-                // 2. МАРШРУТТАР
+                // Маршруты
                 let rHtml = '';
                 data.routes.forEach(r => {
                     rHtml += `<div class="list-item"><span>Маршрут ${r.name}</span><span class="list-val">${r.done}/${r.target} (${r.percent}%)</span></div>`;
                 });
                 document.getElementById('routes-content').innerHTML = rHtml;
 
-                // 3. КҮНДЕЛІКТІ
+                // Дни
                 let dHtml = '';
                 data.days.forEach(d => {
                     dHtml += `<div class="list-item"><span>${d.date}</span><span class="list-val">${d.count} автобус</span></div>`;
                 });
                 document.getElementById('days-content').innerHTML = dHtml;
 
-                // 4. ТАБЛИЦЫ АВТОБУСОВ
-                let allHtml = '';
-                let todayHtml = '';
-                let allIdx = 1, todayIdx = 1;
-                
+                // Таблицы автобусов
+                let allHtml = '', todayHtml = '', allIdx = 1, todayIdx = 1;
                 data.fullList.forEach(i => {
                     let rowHtml = `<tr><td>${allIdx++}</td><td>${i.gosNum}</td><td>${i.garage}</td><td>${i.route}</td><td>${i.brigade}</td><td>${i.doors}</td></tr>`;
                     allHtml += rowHtml;
-                    
                     if (i.isToday) {
                         todayHtml += `<tr><td>${todayIdx++}</td><td>${i.gosNum}</td><td>${i.garage}</td><td>${i.route}</td><td>${i.brigade}</td><td>${i.doors}</td></tr>`;
                     }
                 });
                 document.getElementById('all-buses-content').innerHTML = allHtml;
                 document.getElementById('today-buses-content').innerHTML = todayHtml;
-                
-            }).getBusData();
+
+            } catch (error) {
+                document.getElementById('loader').innerText = 'Сервермен байланыс жоқ (Ошибка сети)';
+                console.error(error);
+            }
         }
     </script>
 </body>
