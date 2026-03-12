@@ -131,8 +131,8 @@
 
     <script>
         // ========================================================
-        // ВАЖНО: ВСТАВЬТЕ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT
-        const API_URL = 'СЮДА_ВСТАВИТЬ_ВАШУ_ССЫЛКУ';
+        // ВАЖНО: ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT
+        const API_URL = 'ВСТАВЬТЕ_ССЫЛКУ_СЮДА';
         // ========================================================
 
         const PIN = '2019';
@@ -147,7 +147,6 @@
             }
         }
 
-        // Логика открытия/закрытия модальных окон
         function openModal(id) { 
             document.getElementById('main-view').style.display = 'none'; 
             document.getElementById(id).classList.add('active'); 
@@ -155,19 +154,15 @@
         function closeModals() { 
             document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); 
             document.getElementById('main-view').style.display = 'block'; 
-            window.scrollTo(0, 0); // Возвращаем скролл наверх
+            window.scrollTo(0, 0);
         }
-        
-        // Показ всех автопарков
         function showAllParks(btn) { 
             document.getElementById('hidden-parks').style.display = 'block'; 
             btn.style.display = 'none'; 
         }
 
-        // Основная функция загрузки данных
         async function loadData() {
             try {
-                // Запрос к бэкенду
                 const response = await fetch(API_URL);
                 const data = await response.json();
 
@@ -176,16 +171,13 @@
                     return;
                 }
 
-                // Скрываем лоадер, показываем контент
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
 
-                // Заполняем главные цифры
                 document.getElementById('total-count').innerText = data.totalDone;
                 document.getElementById('total-percent').innerText = `(${data.totalPercent}%)`;
                 document.getElementById('latest-count').innerText = data.todayDone;
 
-                // 1. ПАРКИ (Топ 6 + Остальные)
                 let pHtml = '';
                 data.parks.forEach((p, i) => {
                     let pct = p.target > 0 ? ((p.done/p.target)*100).toFixed(1) : 0;
@@ -203,21 +195,18 @@
                 }
                 document.getElementById('parks-container').innerHTML = pHtml;
 
-                // 2. МАРШРУТЫ
                 let rHtml = '';
                 data.routes.forEach(r => {
                     rHtml += `<div class="list-item"><span>Маршрут ${r.name}</span><span class="list-val">${r.done}/${r.target} (${r.percent}%)</span></div>`;
                 });
                 document.getElementById('routes-content').innerHTML = rHtml;
 
-                // 3. ДНИ
                 let dHtml = '';
                 data.days.forEach(d => {
                     dHtml += `<div class="list-item"><span>${d.date}</span><span class="list-val">${d.count} автобус</span></div>`;
                 });
                 document.getElementById('days-content').innerHTML = dHtml;
 
-                // 4. ТАБЛИЦЫ АВТОБУСОВ (Все и За сегодня)
                 let allHtml = '', todayHtml = '', allIdx = 1, todayIdx = 1;
                 data.fullList.forEach(i => {
                     let rowHtml = `<tr><td>${allIdx++}</td><td>${i.gosNum}</td><td>${i.garage}</td><td>${i.route}</td><td>${i.brigade}</td><td>${i.doors}</td></tr>`;
